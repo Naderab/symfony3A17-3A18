@@ -4,6 +4,7 @@
         <td>{{s.id}}</td>
         <td>{{s.username}}</td>
         <td>{{s.email}}</td>
+        <td>{{s.idClassroom.name}}</td>
         <td><a href="{{path('delete_student',{'id':s.id})}}">Delete</a></td>
         <td><a href="{{path('update_student',{'id':s.id})}}">Update</a></td>
 

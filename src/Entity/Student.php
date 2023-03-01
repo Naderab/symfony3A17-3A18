@@ -19,6 +19,9 @@ class Student
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[ORM\ManyToOne(inversedBy: 'students')]
+    private ?Classroom $idClassroom = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Student
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getIdClassroom(): ?Classroom
+    {
+        return $this->idClassroom;
+    }
+
+    public function setIdClassroom(?Classroom $idClassroom): self
+    {
+        $this->idClassroom = $idClassroom;
 
         return $this;
     }
