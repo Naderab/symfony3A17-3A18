@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Classroom;
+use App\Form\ClassroomType;
 use App\Repository\ClassroomRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomController extends AbstractController
 {
@@ -22,13 +24,23 @@ class ClassroomController extends AbstractController
     }
 
     #[Route('/addClassroom', name: 'add_classroom')]
-    public function addClassroom(ManagerRegistry $doctrine){
+    public function addClassroom(Request $req,ManagerRegistry $doctrine){
         $classroom = new Classroom();
-        $classroom->setName('test persist');
-        $em=$doctrine->getManager();
-        $em->persist($classroom);
-        $em->flush();
-        return $this->redirectToRoute('app_classroom');
+        $form = $this->createForm(ClassroomType::class,$classroom);
+        $form->handleRequest($req);
+        if($form->isSubmitted()){
+            $em=$doctrine->getManager();
+            $em->persist($classroom);
+            $em->flush();
+            return $this->redirectToRoute('app_classroom');
+        }
+        
+        // return $this->renderForm('classroom/add.html.twig',[
+        //     'form'=>$form
+        // ]);
+        return $this->render('classroom/addClassroom.html.twig',[
+            'form'=>$form->createView()
+        ]);
     }
 
     #[Route('/deleteClassroom/{id}', name: 'delete_classroom')]
@@ -41,12 +53,22 @@ class ClassroomController extends AbstractController
     }
 
     #[Route('/updateClassroom/{id}', name: 'update_classroom')]
-    public function updateStudent($id,ManagerRegistry $doctrine){
+    public function updateStudent(Request $req,$id,ManagerRegistry $doctrine){
         $classroom=$doctrine->getRepository(Classroom::class)->find($id);
-        $classroom->setUsername('test update');
-        $em=$doctrine->getManager();
-        //$em->persist($student);
-        $em->flush();
-        return $this->redirectToRoute('app_classroom');
+        $form = $this->createForm(ClassroomType::class,$classroom);
+        $form->handleRequest($req);
+
+        if($form->isSubmitted()){
+            $em=$doctrine->getManager();
+            $em->flush();
+            return $this->redirectToRoute('app_classroom');
+        }
+        
+        // return $this->renderForm('classroom/add.html.twig',[
+        //     'form'=>$form
+        // ]);
+        return $this->render('classroom/addClassroom.html.twig',[
+            'form'=>$form->createView()
+        ]);
     }
 }

@@ -1,12 +1,41 @@
-<table border="1">
-    {%for s in classrooms%}
+{% extends 'base.html.twig' %}
+
+{% block title %}Classrooms list!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+        <a class="btn btn-primary" href="{{path('add_classroom')}}">Add new classroom</a>
+
+</div>
+</div>
+<div class="row">
+    <table class="table table-striped" >
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
+        {%for s in classrooms%}
         <tr>
             <td>{{s.id}}</td>
             <td>{{s.name}}</td>
             
-            {#<td><a href="{{path('delete_student',{'id':s.id})}}">Delete</a></td>
-            <td><a href="{{path('update_student',{'id':s.id})}}">Update</a></td>#}
+            <td><a class="btn btn-danger" href="{{path('delete_classroom',{'id':s.id})}}">Delete</a></td>
+            <td><a class="btn btn-primary" href="{{path('update_classroom',{'id':s.id})}}">Update</a></td>
     
         </tr>
     {%endfor%}
+    </tbody>
     </table>
+</div>
+</div>
+{%endblock%}

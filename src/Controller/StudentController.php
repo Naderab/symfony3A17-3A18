@@ -67,12 +67,23 @@ class StudentController extends AbstractController
     }
 
     #[Route('/updateStudent/{id}', name: 'update_student')]
-    public function updateStudent($id,ManagerRegistry $doctrine){
+    public function updateStudent(Request $req,$id,ManagerRegistry $doctrine){
         $student=$doctrine->getRepository(Student::class)->find($id);
-        $student->setUsername('test update');
-        $em=$doctrine->getManager();
-        //$em->persist($student);
-        $em->flush();
-        return $this->redirectToRoute('app_student');
+        $form = $this->createForm(StudentType::class,$student);
+        $form->handleRequest($req);
+        // $student->setUsername('test persist');
+        // $student->setEmail('persit@test.com');
+        if($form->isSubmitted()){
+            $em=$doctrine->getManager();
+            $em->flush();
+            return $this->redirectToRoute('app_student');
+        }
+        
+        // return $this->renderForm('student/add.html.twig',[
+        //     'form'=>$form
+        // ]);
+        return $this->render('student/add.html.twig',[
+            'form'=>$form->createView()
+        ]);
     }
 }
