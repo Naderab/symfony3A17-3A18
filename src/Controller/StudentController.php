@@ -103,7 +103,7 @@ class StudentController extends AbstractController
     #[Route('/studentByEmail',name:'student_byemail')]
     public function studentListOrderedByEmail(StudentRepository $repo){
         $students = $repo->StudentOrderedByEmail();
-        return $this->render('student/index.html.twig',[
+        return $this->render('student/byEmail.html.twig',[
             'students'=>$students
         ]);
     }
