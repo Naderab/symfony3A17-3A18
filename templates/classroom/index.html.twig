@@ -31,6 +31,8 @@
             
             <td><a class="btn btn-danger" href="{{path('delete_classroom',{'id':s.id})}}">Delete</a></td>
             <td><a class="btn btn-primary" href="{{path('update_classroom',{'id':s.id})}}">Update</a></td>
+            <td><a class="btn btn-primary" href="{{path('student_byClassroom',{'idC':s.id})}}">Show students list</a></td>
+
     
         </tr>
     {%endfor%}

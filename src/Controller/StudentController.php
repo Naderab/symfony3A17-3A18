@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Student;
+use App\Form\SearchStudentType;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,12 +25,24 @@ class StudentController extends AbstractController
     // }
 
     #[Route('/student', name: 'app_student')]
-    public function index(ManagerRegistry $doctrine): Response
+    public function index(Request $req,ManagerRegistry $doctrine): Response
     {
         $repo = $doctrine->getRepository(Student::class);
+        $form = $this->createForm(SearchStudentType::class);
+        $form->handleRequest($req);
         $students = $repo->findAll();
+        if($form->isSubmitted())
+        {
+            $students = $repo->searchByName($form->getData('search'));
+            return $this->render('student/index.html.twig', [
+                'controller_name' => 'StudentController',
+                'form'=>$form->createView(),
+                'students'=>$students
+            ]);
+        }
         return $this->render('student/index.html.twig', [
             'controller_name' => 'StudentController',
+            'form'=>$form->createView(),
             'students'=>$students
         ]);
     }
@@ -84,6 +97,22 @@ class StudentController extends AbstractController
         // ]);
         return $this->render('student/add.html.twig',[
             'form'=>$form->createView()
+        ]);
+    }
+
+    #[Route('/studentByEmail',name:'student_byemail')]
+    public function studentListOrderedByEmail(StudentRepository $repo){
+        $students = $repo->StudentOrderedByEmail();
+        return $this->render('student/index.html.twig',[
+            'students'=>$students
+        ]);
+    }
+
+    #[Route('/studentByClassroom/{idC}',name:'student_byClassroom')]
+    public function studentsByClassroom($idC,StudentRepository $repo){
+        $students = $repo->getStudentByClassroom($idC);
+        return $this->render('student/byClass.html.twig',[
+            'students'=>$students
         ]);
     }
 }

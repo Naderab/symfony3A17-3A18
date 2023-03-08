@@ -39,6 +39,45 @@ class StudentRepository extends ServiceEntityRepository
         }
     }
 
+    public function StudentOrderedByEmail(){
+        return $this->createQueryBuilder('s')
+                ->orderBy('s.email','ASC')
+                ->getQuery()
+                ->getResult();
+    }
+
+    public function searchByName($name){
+        return $this->createQueryBuilder('s')
+                ->where('s.username LIKE :para')
+                ->setParameter('para',$name)
+                ->getQuery()
+                ->getResult();
+    }
+
+    public function getStudentByClassroom($id){
+        return $this->createQueryBuilder('s')
+                ->join('s.idClassroom','c')
+                ->addSelect('c')
+                ->where('c.id = :id')
+                ->setParameter('id',$id)
+                ->getQuery()
+                ->getResult();
+    }
+
+    public function getStudentByClassDQL ($id) :array {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery('SELECT s FROM App\Entity\Student s JOIN s.idClassroom c WHERE c.id = :id')
+                ->setParameter('id',$id);
+        return $query->getResult();
+    }
+
+    public function getStudentsNotAdmitted() : array {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery('SELECT s FROM App\Entity\Student s WHERE s.average < 8');
+        return $query->getResult();
+    }
+
+
 //    /**
 //     * @return Student[] Returns an array of Student objects
 //     */

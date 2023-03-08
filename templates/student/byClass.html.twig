@@ -14,26 +14,8 @@
         <a class="btn btn-primary" href="{{path('add_student')}}">Add new student</a>
 
 </div>
-<div class="col-md-4">
-    <a class="btn btn-primary" href="{{path('student_byemail')}}">Order By Email</a>
-
-</div>
 </div>
 <div class="row">
-    <div class="row">
- 
-    {{form_start(form)}}
-    <div class="form-group">
-            {{form_label(form.search,"Search :",{"attr":{"class":"form-control"}})}}
-            {{form_widget(form.search,{"attr":{"class":"form-control"}})}}
-    </div>
-    <br>
-    <div class="form-group">
-        {{form_widget(form.submit,{'attr':{'class':'btn btn-primary'}})}}
-    </div>
-    {{form_end(form)}}
-       
-    </div>
     <table class="table table-striped" >
         <thead>
             <tr>
